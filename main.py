@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterForm
+from forms import CreatePostForm, RegisterForm, LoginForm
 from flask_gravatar import Gravatar
 
 app = Flask(__name__)
@@ -75,9 +75,20 @@ def register():
     return render_template("register.html", form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        existing_user = User.query.filter_by(email=email).first()  # if this query returns something all systems go
+
+        if existing_user and check_password_hash(password=password, pwhash=existing_user.password):
+            return redirect(url_for('get_all_posts'))
+        return 'Bad username or password. Check credentials and try again.'
+
+    return render_template("login.html", form=form)
 
 
 @app.route('/logout')
