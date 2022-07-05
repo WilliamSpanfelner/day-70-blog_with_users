@@ -32,6 +32,13 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    name = db.Column(db.String(1000))
+
+
 db.create_all()
 
 
@@ -50,11 +57,20 @@ def register():
         name = form.name.data
 
         # Now setup a User object and add the new user if possible
+        existing_user = User.query.filter_by(email=email).first()  # a user exists if this line returns a result
+        if existing_user:
+            return redirect(url_for('register'))
 
-        return f"User details submitted: " \
-               f"\nname: {name} " \
-               f"\nemail: {email} " \
-               f"\npassword: {password}"
+        # Hash the password and create a new User object
+        hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+        new_user = User(email=email, name=name, password=hashed_pw)
+
+        # Now add the user to the db
+        db.session.add(new_user)
+        db.session.commit()
+
+        # redirect home
+        return redirect(url_for('get_all_posts'))
 
     return render_template("register.html", form=form)
 
