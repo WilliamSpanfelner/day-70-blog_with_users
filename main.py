@@ -45,8 +45,16 @@ def get_all_posts():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        name = form.name.data
 
-        return "User details submitted"
+        # Now setup a User object and add the new user if possible
+
+        return f"User details submitted: " \
+               f"\nname: {name} " \
+               f"\nemail: {email} " \
+               f"\npassword: {password}"
 
     return render_template("register.html", form=form)
 
