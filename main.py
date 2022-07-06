@@ -84,7 +84,7 @@ def login():
 
         existing_user = User.query.filter_by(email=email).first()  # if this query returns something all systems go
 
-        if existing_user and check_password_hash(password=password, pwhash=existing_user.password):
+        if existing_user and check_password_hash(existing_user.password, password):
             return redirect(url_for('get_all_posts'))
         return 'Bad username or password. Check credentials and try again.'
 
