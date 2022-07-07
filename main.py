@@ -107,6 +107,7 @@ def login():
         else:
             # Here the user must be in db.  Check if pw is good, otherwise error.
             if pw_good:
+                login_user(existing_user)
                 return redirect(url_for('get_all_posts'))
             flash('Incorrect password. Please check credentials and try again.')
             return redirect(url_for('login'))
