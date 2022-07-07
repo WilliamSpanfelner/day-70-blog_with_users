@@ -96,13 +96,17 @@ def login():
 
         existing_user = User.query.filter_by(email=email).first()  # if this query returns something all systems go
 
+        # Prevent crash from checking non-existent user password
         try:
+            # Compare passwords if possible
             pw_good = check_password_hash(existing_user.password, password)
         except AttributeError:
+            # Arriving here means no user with email entered is in db.
             flash("No record of that email exists. Please try again.")
             return redirect(url_for('login'))
         else:
-            if existing_user and pw_good:
+            # Here the user must be in db.  Check if pw is good, otherwise error.
+            if pw_good:
                 return redirect(url_for('get_all_posts'))
             flash('Incorrect password. Please check credentials and try again.')
             return redirect(url_for('login'))
