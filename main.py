@@ -71,7 +71,8 @@ def register():
 
         existing_user = User.query.filter_by(email=email).first()  # a user exists if this line returns a result
         if existing_user:
-            return redirect(url_for('register'))
+            flash("Please login directly with your credentials.")
+            return redirect(url_for('login'))
 
         hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
         new_user = User(email=email, name=name, password=hashed_pw)
