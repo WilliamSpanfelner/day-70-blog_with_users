@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -71,7 +71,7 @@ def register():
 
         existing_user = User.query.filter_by(email=email).first()  # a user exists if this line returns a result
         if existing_user:
-            flash("Please login directly with your credentials.")
+            flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
 
         hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
@@ -96,9 +96,16 @@ def login():
 
         existing_user = User.query.filter_by(email=email).first()  # if this query returns something all systems go
 
-        if existing_user and check_password_hash(existing_user.password, password):
-            return redirect(url_for('get_all_posts'))
-        return 'Bad username or password. Check credentials and try again.'
+        try:
+            pw_good = check_password_hash(existing_user.password, password)
+        except AttributeError:
+            flash("No record of that email exists. Please try again.")
+            return redirect(url_for('login'))
+        else:
+            if existing_user and pw_good:
+                return redirect(url_for('get_all_posts'))
+            flash('Incorrect password. Please check credentials and try again.')
+            return redirect(url_for('login'))
 
     return render_template("login.html", form=form)
 
