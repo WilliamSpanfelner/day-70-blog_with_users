@@ -22,17 +22,19 @@ db = SQLAlchemy(app)
 
 
 # CONFIGURE TABLES
-class Comment(db.Model):
+class Comment(db.Model):  # child
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = relationship("User", back_populates='comments')
 
 
 class BlogPost(db.Model):  # child
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    author = db.relationship("User", back_populates='posts')
+    author = relationship("User", back_populates='posts')
     # author = db.Column(db.String(250), nullable=False)
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
@@ -53,7 +55,8 @@ class User(UserMixin, db.Model):  # parent
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
-    posts = db.relationship("BlogPost", back_populates='author')
+    posts = relationship("BlogPost", back_populates='author')
+    comments = relationship("Comment", back_populates='author')
 
 
 db.create_all()
@@ -74,16 +77,6 @@ def admin_only(function):
         elif current_user.id == 1 or current_user.id == 2:
             return function(*args, **kwargs)
         return "<h1>Forbidden</h1><p>Insufficient access privileges to perform this action.</p>", 403
-
-        # try:
-        #     current_user.id
-        # except AttributeError:
-        #     return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
-        # else:
-        #     if current_user.id == 1 or current_user.id == 2:  # user 2 is promoted to admin
-        #         return function(*args, **kwargs)
-        #     return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
-
     return decorator
 
 
