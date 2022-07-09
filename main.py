@@ -22,10 +22,12 @@ db = SQLAlchemy(app)
 
 
 # CONFIGURE TABLES
-class BlogPost(db.Model):
+class BlogPost(db.Model):  # child
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(250), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.relationship("User", back_populates='posts')
+    # author = db.Column(db.String(250), nullable=False)
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
@@ -39,11 +41,13 @@ login_manager.login_view = 'login'
 login_manager.init_app(app)
 
 
-class User(UserMixin, db.Model):
+class User(UserMixin, db.Model):  # parent
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
+    posts = db.relationship("BlogPost", back_populates='author')
 
 
 db.create_all()
@@ -64,7 +68,7 @@ def admin_only(function):
         except AttributeError:
             return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
         else:
-            if current_user.id == 1:
+            if current_user.id == 1 or current_user.id == 2:  # user 2 is promoted to admin
                 return function(*args, **kwargs)
             return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
 
@@ -153,7 +157,7 @@ def contact():
     return render_template("contact.html")
 
 
-@app.route("/new-post")
+@app.route("/new-post", methods=['GET', 'POST'])
 @admin_only
 def add_new_post():
     form = CreatePostForm()
