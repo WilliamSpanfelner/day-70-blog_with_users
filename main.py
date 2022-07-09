@@ -63,14 +63,20 @@ def load_user(user_id):
 def admin_only(function):
     @wraps(function)
     def decorator(*args, **kwargs):
-        try:
-            current_user.id
-        except AttributeError:
-            return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
-        else:
-            if current_user.id == 1 or current_user.id == 2:  # user 2 is promoted to admin
-                return function(*args, **kwargs)
-            return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
+        if current_user.is_anonymous:
+            return "<h1>Forbidden</h1><p>Insufficient access privileges to perform this action.</p>", 403
+        elif current_user.id == 1 or current_user.id == 2:
+            return function(*args, **kwargs)
+        return "<h1>Forbidden</h1><p>Insufficient access privileges to perform this action.</p>", 403
+
+        # try:
+        #     current_user.id
+        # except AttributeError:
+        #     return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
+        # else:
+        #     if current_user.id == 1 or current_user.id == 2:  # user 2 is promoted to admin
+        #         return function(*args, **kwargs)
+        #     return "<h1>Forbidden</h1><p>Insufficient access priviledges to perform this action.</p>", 403
 
     return decorator
 
