@@ -31,7 +31,7 @@ class Comment(db.Model):  # child
     author = relationship("User", back_populates='comments')
 
     post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'))
-    parent_post = relationship("Blog_Post", back_populates='comments')
+    parent_post = relationship("BlogPost", back_populates='comments')
 
 
 class BlogPost(db.Model):  # child of user # parent to comments
@@ -154,10 +154,24 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def show_post(post_id):
     form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
+    if form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash("Please login or register to comment.")
+            return redirect(url_for('login'))
+
+        print("Your commments will be logged.")
+        new_comment = Comment(
+            text=form.comment.data,
+            author_id=current_user.id,
+            post_id=post_id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+
     return render_template("post.html", post=requested_post, form=form)
 
 
