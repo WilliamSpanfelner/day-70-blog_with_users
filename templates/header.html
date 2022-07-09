@@ -35,6 +35,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
+
+          {% if not current_user.is_anonymous: %}
+          <li class="nav-item">
+             <a class="nav-link" href="#">Welcome, {{ current_user.name }}</a>
+          </li>
+          {% endif %}
+
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('get_all_posts') }}">Home</a>
           </li>
