@@ -78,7 +78,7 @@ class User(UserMixin, db.Model):  # parent
     comments = relationship("Comment", back_populates='author')
 
 
-db.create_all()
+# db.create_all()
 
 
 # Create the user loader for a session cookie
