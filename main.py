@@ -1,3 +1,4 @@
+import bleach
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
@@ -70,7 +71,7 @@ class User(UserMixin, db.Model):  # parent
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
-    name = db.Column(db.String(1000))
+    name = db.Column(db.String(100))
 
     posts = relationship("BlogPost", back_populates='author')
     comments = relationship("Comment", back_populates='author')
@@ -96,6 +97,30 @@ def admin_only(function):
         return "<h1>Forbidden</h1><p>Insufficient access privileges to perform this action.</p>", 403
     return decorator
 
+
+def sanitize(content):
+    """Returns 'clean' HTML content from CKEditor
+    content: text
+    return: text
+    """
+    allowed_tags = [
+        'a', 'abbr', 'acronym', 'address', 'b', 'br', 'div', 'dl', 'dt',
+        'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img',
+        'li', 'ol', 'p', 'pre', 'q', 's', 'small', 'strike',
+        'span', 'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th',
+        'thead', 'tr', 'tt', 'u', 'ul'
+    ]
+
+    allowed_attrs = {
+        'a': ['href', 'target', 'title'],
+        'img': ['src', 'alt', 'width', 'height'],
+    }
+
+    cleaned = bleach.clean(content,
+                           tags=allowed_tags,
+                           attributes=allowed_attrs,
+                           strip=True)
+    return cleaned
 
 @app.route('/')
 def get_all_posts():
@@ -202,7 +227,7 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            body=form.body.data,
+            body=sanitize(form.body.data),
             img_url=form.img_url.data,
             author=current_user,
             date=date.today().strftime("%B %d, %Y")
@@ -221,7 +246,7 @@ def edit_post(post_id):
         title=post.title,
         subtitle=post.subtitle,
         img_url=post.img_url,
-        # author=post.author,
+        # author=post.author,  # look at this should it be set to current_user?
         body=post.body
     )
     if edit_form.validate_on_submit():
