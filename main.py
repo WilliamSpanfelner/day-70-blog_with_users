@@ -6,7 +6,7 @@ from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
@@ -95,6 +95,7 @@ def admin_only(function):
         elif current_user.id == 1 or current_user.id == 2:
             return function(*args, **kwargs)
         return "<h1>Forbidden</h1><p>Insufficient access privileges to perform this action.</p>", 403
+
     return decorator
 
 
@@ -121,6 +122,7 @@ def sanitize(content):
                            attributes=allowed_attrs,
                            strip=True)
     return cleaned
+
 
 @app.route('/')
 def get_all_posts():
@@ -197,7 +199,7 @@ def show_post(post_id):
             flash("Please login or register to comment.")
             return redirect(url_for('login'))
 
-        print("Your commments will be logged.")
+        print("Your comments will be logged.")
         new_comment = Comment(
             text=form.comment.data,
             author_id=current_user.id,
