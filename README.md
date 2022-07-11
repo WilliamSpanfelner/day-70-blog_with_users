@@ -1,9 +1,9 @@
-# Blog with users, editing, posting and commenting employing SQLite database.
+# Blog hosted on [Heroku](https://blog-65.herokuapp.com/) with SQLite upgrade to Postgres database.
 - 👋 Hi, I’m @WilliamSpanfelner
 - 👀 I’m interested in using Python with Swift in iOS environments and why it may or may not be desirable.
 - 🌱 I’m currently learning Python with the London App Brewery and Angela Yu's [100 Days of Code: 
 The Complete Python Pro Bootcamp for 2022](https://www.udemy.com/course/100-days-of-code/) on Udemy.  
-- 🧑‍💻 The previous blog site, in essence, from Day 67 with an SQLite database comprised of BlogPost, User, and Comment tables exploiting one-to-many relationships between Users and Posts in addition to Posts and Comments.  A very enjoyable project with quite a few riddles thrown in for good measure.
+- 🧑‍💻 The previous blog site, in essence, from Day 69 now hosted at https://blog-65.herokuapp.com/ with a Postgres database comprised of the same db functionality.  Very satisfying project.
 - 💞️ I’m looking to collaborate on application development.
 - 📫 How to reach me...
 
