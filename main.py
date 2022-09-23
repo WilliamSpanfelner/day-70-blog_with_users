@@ -135,7 +135,8 @@ def sanitize(content):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts)
+    year = date.today().year
+    return render_template("index.html", all_posts=posts, yr=year)
 
 
 @app.route('/register', methods=['GET', 'POST'])
