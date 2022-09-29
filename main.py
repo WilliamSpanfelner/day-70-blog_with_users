@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+from forms import CreatePostForm, RegisterForm, LoginForm, NewCommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
 import os
@@ -202,7 +202,7 @@ def logout():
 
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def show_post(post_id):
-    form = CommentForm()
+    form = NewCommentForm()
     requested_post = BlogPost.query.get(post_id)
     if form.validate_on_submit():
         if not current_user.is_authenticated:
