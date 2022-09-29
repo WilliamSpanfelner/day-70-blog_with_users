@@ -33,15 +33,14 @@
                 </div>
               {% endif %}
 
-    <!--           Comments Area -->
-              <div class="container">
-                <div class="row">
-                  {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary rounded-pill"}) }}
-                  {{ ckeditor.load() }}
-                  {{ ckeditor.config(name='comment') }}
-                </div>
+              <!-- Comments Area -->
+              <div class="row">
+                  <div class="col-sm-12 mx-auto">
+                      {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary rounded-pill"}) }}
+                  </div>
               </div>
-              <div class="col-lg-8 col-md-10 mx-auto comment">
+
+              <div class="mx-auto comment">
                   <ul class="commentList">
                     {% for comment in post.comments: %}
                     <li>
