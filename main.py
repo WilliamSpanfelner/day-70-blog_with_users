@@ -20,6 +20,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
+YEAR = date.today().year
+
 # CONNECT TO DB
 uri = os.getenv("DATABASE_URL", "sqlite:///blog.db")
 print(f"uri is {uri}")
@@ -135,8 +137,7 @@ def sanitize(content):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    year = date.today().year
-    return render_template("index.html", all_posts=posts, yr=year)
+    return render_template("index.html", all_posts=posts, yr=YEAR)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -162,7 +163,7 @@ def register():
         login_user(new_user)
         return redirect(url_for('get_all_posts'))
 
-    return render_template("register.html", form=form)
+    return render_template("register.html", form=form, yr=YEAR)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -190,7 +191,7 @@ def login():
             flash('Incorrect password. Please check credentials and try again.')
             return redirect(url_for('login'))
 
-    return render_template("login.html", form=form)
+    return render_template("login.html", form=form, yr=YEAR)
 
 
 @app.route('/logout')
@@ -217,17 +218,17 @@ def show_post(post_id):
         db.session.add(new_comment)
         db.session.commit()
 
-    return render_template("post.html", post=requested_post, form=form)
+    return render_template("post.html", post=requested_post, form=form, yr=YEAR)
 
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template("about.html", yr=YEAR)
 
 
 @app.route("/contact")
 def contact():
-    return render_template("contact.html")
+    return render_template("contact.html", yr=YEAR)
 
 
 @app.route("/new-post", methods=['GET', 'POST'])
@@ -246,7 +247,7 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form)
+    return render_template("make-post.html", form=form, yr=YEAR)
 
 
 @app.route("/edit-post/<int:post_id>", methods=['GET', 'POST'])
@@ -269,7 +270,7 @@ def edit_post(post_id):
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
 
-    return render_template("make-post.html", form=edit_form)
+    return render_template("make-post.html", form=edit_form, yr=YEAR)
 
 
 @app.route("/delete/<int:post_id>")
