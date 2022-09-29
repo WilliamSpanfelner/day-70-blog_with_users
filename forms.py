@@ -10,6 +10,14 @@ class CommentForm(FlaskForm):
     submit = SubmitField("SUBMIT COMMENT")
 
 
+class NewCommentForm(FlaskForm):
+    comment = StringField("Comment", validators=[DataRequired()])
+    # if multiline comments are required the following line will work
+    # although security implications are unclear
+    # comment = TextAreaField("Comment", validators=[DataRequired()])
+    submit = SubmitField("SUBMIT COMMENT")
+
+
 class CreatePostForm(FlaskForm):
     title = StringField("Blog Post Title", validators=[DataRequired()])
     subtitle = StringField("Subtitle", validators=[DataRequired()])
