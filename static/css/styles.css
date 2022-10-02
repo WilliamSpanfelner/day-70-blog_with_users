@@ -1,0 +1,19 @@
+/* [How can I override Bootstrap CSS styles?](https://stackoverflow.com/questions/20721248/how-can-i-override-bootstrap-css-styles)*/
+#bootstrap-overrides code {
+    /* styling for commands */
+    color: green;
+}
+
+#bootstrap-overrides tt code{
+    /* styling for errors */
+    color: #ad2037;
+}
+
+img {
+    width: 100%;
+}
+
+#header-image {
+    background-size: cover;
+    background-position: left;
+}
