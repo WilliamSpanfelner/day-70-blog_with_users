@@ -54,7 +54,7 @@ class BlogPost(db.Model):  # child of user # parent to comments
 
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
-    date = db.Column(db.DATETIME, nullable=False)
+    date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
 
