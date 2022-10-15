@@ -136,7 +136,7 @@ def sanitize(content):
 
 @app.route('/')
 def get_all_posts():
-    posts = BlogPost.query.order_by(BlogPost.date.desc()).all()
+    posts = BlogPost.query.order_by(BlogPost.id.desc()).all()
     return render_template("index.html", all_posts=posts, yr=YEAR)
 
 
@@ -242,7 +242,7 @@ def add_new_post():
             body=sanitize(form.body.data),
             img_url=form.img_url.data,
             author=current_user,
-            date=date.today()
+            date=date.today().strftime("%B %d, %Y")
         )
         db.session.add(new_post)
         db.session.commit()
