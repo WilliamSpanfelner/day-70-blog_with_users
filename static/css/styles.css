@@ -8,7 +8,7 @@
     color: green;
 }
 
-[id="bootstrap-overrides"] tt, code {
+[id="bootstrap-overrides"] p tt, code {
     /* styling for errors */
     color: var(--error-red);
 }
