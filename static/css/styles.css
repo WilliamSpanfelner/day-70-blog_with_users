@@ -8,7 +8,7 @@
     color: green;
 }
 
-#bootstrap-overrides samp {
+[id="bootstrap-overrides"] samp  {
     /* styling for errors */
     color: var(--error-red);
 }
