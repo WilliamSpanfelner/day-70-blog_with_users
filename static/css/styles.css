@@ -1,19 +1,24 @@
 /* [How can I override Bootstrap CSS styles?](https://stackoverflow.com/questions/20721248/how-can-i-override-bootstrap-css-styles)*/
-#bootstrap-overrides code {
+[id="bootstrap-overrides"] code {
     /* styling for commands */
     color: green;
 }
 
-#bootstrap-overrides tt code{
+[id="bootstrap-overrides"] tt {
     /* styling for errors */
     color: #ad2037;
+}
+
+:is(.pagination, [id="page-indicator"]) {
+    font-size: 0.8rem;
+    font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 
 img {
     width: 100%;
 }
 
-#header-image {
+[id="header-image"] {
     background-size: cover;
     background-position: left;
 }
