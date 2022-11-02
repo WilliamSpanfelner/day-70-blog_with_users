@@ -1,12 +1,16 @@
 /* [How can I override Bootstrap CSS styles?](https://stackoverflow.com/questions/20721248/how-can-i-override-bootstrap-css-styles)*/
+:root {
+ --error-red: #ad2037;
+}
+
 [id="bootstrap-overrides"] code {
     /* styling for commands */
     color: green;
 }
 
-[id="bootstrap-overrides"] tt {
+[id="bootstrap-overrides"] tt, code {
     /* styling for errors */
-    color: #ad2037;
+    color: var(--error-red);
 }
 
 :is(.pagination, [id="page-indicator"]) {
