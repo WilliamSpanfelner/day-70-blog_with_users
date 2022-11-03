@@ -8,12 +8,12 @@
     color: green;
 }
 
-[id="bootstrap-overrides"] samp  {
+samp  {
     /* styling for errors */
     color: var(--error-red);
 }
 
-:is(.pagination, [id="page-indicator"]) {
+:is(.pagination, .page-indicator) {
     font-size: 0.8rem;
     font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
@@ -22,7 +22,7 @@ img {
     width: 100%;
 }
 
-[id="header-image"] {
+.header-image {
     background-size: cover;
     background-position: left;
 }
