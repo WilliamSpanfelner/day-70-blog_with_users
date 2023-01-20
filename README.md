@@ -1,3 +1,4 @@
+![Screenshot](day-70-blog_with_users.png)
 # Blog hosted on [Heroku](https://blog-65.herokuapp.com/) with SQLite upgrade to Postgres database.
 - 👋 Hi, I’m @WilliamSpanfelner
 - 👀 I’m interested in using Python with Swift in iOS environments and why it may or may not be desirable.
